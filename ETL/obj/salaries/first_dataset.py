@@ -6,56 +6,7 @@ import re
 relative_csv_path = os.path.join('ETL', 'raw_data','salaries','data_scientists_salaries_from_reddit.csv')
 df = pd.read_csv(relative_csv_path)
 
-def get_title():
-    job_titles = df.iloc[:, 1]
-    new_job_titles = []
-
-    for jt in job_titles:
-        if pd.isna(jt):
-            jt = np.nan
-        else:
-            if 'ds' in jt.lower():
-                jt = 'Data Scientist'
-            elif 'data' in jt.lower():
-                if 'scientist' in jt.lower():
-                    jt = 'Data Scientist'
-                elif 'analy' in jt.lower():
-                    jt = 'Data Analyst'
-            elif 'machine learning' in jt.lower() or 'ml' in jt.lower():
-                jt = 'ML Engineer'
-            elif 'analytics' in jt.lower():
-                jt = 'Analytics Manager'
-            elif 'analyst' in jt.lower():
-                if 'business' in jt.lower() or 'bi' in jt.lower() or 'intelligence' in jt.lower():
-                    jt = 'BI Analyst'
-                else:
-                    jt = 'Product Analyst'
-            elif 'directo' in jt.lower():
-                jt = 'Director'
-            elif '/' in jt.lower() and 'sr' in jt.lower():
-                temp = jt.split('/')[0]
-                jt = temp.split('Sr. ')[1]
-            elif '/' in jt.lower():
-                jt = jt.split('/')[0]
-            elif ',' in jt.lower():
-                jt = jt.split(',')[0]
-            elif '(' in jt.lower():
-                jt = jt.split('(')[0]
-            elif 'sr' in jt.lower():
-                jt = jt.split('Sr. ')[1]
-            elif 'senior' in jt.lower():
-                jt = jt.split('Senior ')[1]
-            elif '.' in jt.lower():
-                jt = jt.split('.')[0]
-        new_job_titles.append(jt)
-    return new_job_titles
-
-def get_location():
-  locations = df.iloc[:, 2]
-
-  return True
-
-def get_salary():
+def get_salary_helper():
   salaries = df.iloc[:, 3]
   new_salaries = []
   for salary in salaries:
@@ -184,6 +135,68 @@ def get_salary():
       new_salaries.append(salary)
 
   return new_salaries
+ 
+
+def get_title():
+    job_titles = df.iloc[:, 1]
+    new_job_titles = []
+
+    for jt in job_titles:
+        if pd.isna(jt):
+            jt = np.nan
+        else:
+            if 'ds' in jt.lower():
+                jt = 'Data Scientist'
+            elif 'data' in jt.lower():
+                if 'scientist' in jt.lower():
+                    jt = 'Data Scientist'
+                elif 'analy' in jt.lower():
+                    jt = 'Data Analyst'
+            elif 'machine learning' in jt.lower() or 'ml' in jt.lower():
+                jt = 'ML Engineer'
+            elif 'analytics' in jt.lower():
+                jt = 'Analytics Manager'
+            elif 'analyst' in jt.lower():
+                if 'business' in jt.lower() or 'bi' in jt.lower() or 'intelligence' in jt.lower():
+                    jt = 'BI Analyst'
+                else:
+                    jt = 'Product Analyst'
+            elif 'directo' in jt.lower():
+                jt = 'Director'
+            elif '/' in jt.lower() and 'sr' in jt.lower():
+                temp = jt.split('/')[0]
+                jt = temp.split('Sr. ')[1]
+            elif '/' in jt.lower():
+                jt = jt.split('/')[0]
+            elif ',' in jt.lower():
+                jt = jt.split(',')[0]
+            elif '(' in jt.lower():
+                jt = jt.split('(')[0]
+            elif 'sr' in jt.lower():
+                jt = jt.split('Sr. ')[1]
+            elif 'senior' in jt.lower():
+                jt = jt.split('Senior ')[1]
+            elif '.' in jt.lower():
+                jt = jt.split('.')[0]
+        new_job_titles.append(jt)
+    return new_job_titles
+
+def get_location():
+  locations = df.iloc[:, 2]
+
+  return True
+
+def get_salary():
+  new_salaries = get_salary_helper()
+  new_salaries_amount= []
+  
+  for salary in new_salaries:
+    if pd.isna(salary):
+      new_salaries_amount.append(np.nan)
+      
+    else:
+      new_salaries_amount.append(int(salary.split(' ')[0].strip()))
+  return new_salaries_amount
 
 def get_company_industry():
   company_industry = df.iloc[:, 4]
@@ -281,3 +294,51 @@ def get_experince_level():
     
   return new_priorExperience
 
+def get_salary_currency():
+  new_salaries = get_salary_helper()
+  new_salaries_currency = []
+  
+  for salary in new_salaries:
+    if pd.isna(salary):
+      new_salaries_currency.append(np.nan)
+      
+    else:
+      new_salaries_currency.append(salary.split(' ')[1].strip())
+      
+  return new_salaries_currency
+
+def get_conversion_ratio():
+  salaries_currency = get_salary_currency()
+  conv_ratios = []
+  for currency in salaries_currency:
+    if pd.isna(currency):
+      cr = np.nan
+    else:
+      if currency == 'USD':
+        cr = 1
+      elif currency == 'EUR':
+        cr = 1.0882787
+      elif currency == 'GBP':
+        cr = 1.2951632
+      elif currency == 'CAD':
+        cr = 0.73006557
+      elif currency == 'INR':
+        cr = 0.011962834
+      elif currency == 'AUD':
+        cr = 0.67236147
+      elif currency == 'CHF':
+        cr = 1.1143726
+      elif currency == 'DKK':
+        cr = 0.14585547
+      elif currency == 'SGD':
+        cr = 0.74328847
+      elif currency == 'BRL':
+        cr = 0.18421977
+
+    conv_ratios.append(cr)
+    
+  return conv_ratios
+
+def get_reference_year():
+  reference_years = df.iloc[:, 13]
+  return reference_years

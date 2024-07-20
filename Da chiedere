@@ -1,0 +1,5 @@
+1. La granularità quanto é importante
+2. Come gestire location e company insustry
+3. Come una volta ottenuta la tabella finale la gestiamo su postgree => Quando creiamo le sottotabelle?
+4. Se ha senso fare il join come lo abbiamo fatto noi
+5. Quanto ha senso tenere due dataset per quanto riguarda i salary e anche i cost of living

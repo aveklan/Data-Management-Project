@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
+import csv
 
 
 relative_csv_path = os.path.join(
@@ -9,6 +10,7 @@ relative_csv_path = os.path.join(
 raw_data = pd.read_csv(relative_csv_path)
 
 output_path = os.path.join("global_cost_of_living_with_Indexes.xlsx")
+output_path_csv = os.path.join("global_cost_of_living_with_Indexes.csv")
 
 
 def calculate_mean(column):
@@ -69,6 +71,7 @@ def main():
     raw_data["realestate_cost_index"] = realestate_cost_index
 
     raw_data.to_excel(output_path, index=False)
+    raw_data.to_csv(output_path_csv, index=False)
 
 
 if __name__ == "__main__":

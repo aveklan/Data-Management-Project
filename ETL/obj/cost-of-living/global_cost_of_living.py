@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import os
-import csv
 
 
 relative_csv_path = os.path.join(
@@ -72,6 +71,7 @@ def main():
 
     raw_data.to_excel(output_path, index=False)
     raw_data.to_csv(output_path_csv, index=False)
+    print(raw_data)
 
 
 if __name__ == "__main__":

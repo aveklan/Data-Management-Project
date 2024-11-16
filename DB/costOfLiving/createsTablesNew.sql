@@ -20,10 +20,10 @@ CREATE TABLE ProductSubCategory
 
 CREATE TABLE CategoryCostIndex
 (
-    KeyCategoryCostIndex SERIAL PRIMARY KEY,
     City TEXT NOT NULL,
     ProductCategory TEXT NOT NULL,
-    CategoryCostIndex DECIMAL
+    CategoryCostIndex DECIMAL,
+    PRIMARY KEY City, ProductCategory
 );
 
 CREATE TABLE ProductCategory
